@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Audio Player UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .player-container {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-right: 20px;
+        }
+        .album-cover {
+            width: 100%;
+            height: 300px;
+            background-image: url('path_to_your_album_cover.jpg');
+            background-size: cover;
+            position: relative;
+        }
+        .waveform {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .controls {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .controls button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: #1db954;
+        }
+        .song-info {
+            padding: 10px;
+            text-align: center;
+        }
+        .volume-control {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .volume-control input {
+            width: 100%;
+        }
+        .playlist-container {
+            flex: 1;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .search-bar {
+            padding: 10px;
+        }
+        .search-bar input {
+            width: 100%;
+            padding: 5px;
+        }
+        .playlist {
+            height: 400px;
+            overflow-y: auto;
+        }
+        .playlist-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .playlist-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="player-container">
+            <div class="album-cover">
+                <div class="waveform"></div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div class="controls">
+                <button id="prev">⏮</button>
+                <button id="play-pause">▶️</button>
+                <button id="stop">⏹</button>
+                <button id="next">⏭</button>
+            </div>
+            <div class="song-info">
+                <h3 id="song-title">Song Title</h3>
+                <p id="artist-name">Artist Name</p>
+            </div>
+            <div class="volume-control">
+                <span>🔈</span>
+                <input type="range" min="0" max="100" value="50" id="volume-slider">
+            </div>
+        </div>
+        <div class="playlist-container">
+            <div class="search-bar">
+                <input type="text" placeholder="Search songs or hashtags..." id="search-input">
+            </div>
+            <div class="playlist" id="playlist">
+                <!-- Playlist items will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample playlist data
+        const playlist = [
+            { title: "Song 1", artist: "Artist 1", hashtags: ["pop", "summer"] },
+            { title: "Song 2", artist: "Artist 2", hashtags: ["rock", "energetic"] },
+            { title: "Song 3", artist: "Artist 3", hashtags: ["classical", "relaxing"] },
+            // Add more songs as needed
+        ];
+
+        const playlistElement = document.getElementById('playlist');
+        const searchInput = document.getElementById('search-input');
+        const songTitle = document.getElementById('song-title');
+        const artistName = document.getElementById('artist-name');
+        const playPauseButton = document.getElementById('play-pause');
+        const volumeSlider = document.getElementById('volume-slider');
+
+        // Function to render playlist
+        function renderPlaylist(songs) {
+            playlistElement.innerHTML = '';
+            songs.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.classList.add('playlist-item');
+                item.textContent = `${song.title} - ${song.artist}`;
+                item.onclick = () => playSong(index);
+                playlistElement.appendChild(item);
+            });
+        }
+
+        // Initial render
+        renderPlaylist(playlist);
+
+        // Search functionality
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredPlaylist = playlist.filter(song => 
+                song.title.toLowerCase().includes(searchTerm) || 
+                song.artist.toLowerCase().includes(searchTerm) ||
+                song.hashtags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            renderPlaylist(filteredPlaylist);
+        });
+
+        // Play song function (placeholder)
+        function playSong(index) {
+            const song = playlist[index];
+            songTitle.textContent = song.title;
+            artistName.textContent = song.artist;
+            // Here you would typically start playing the audio file
+            playPauseButton.textContent = "⏸️";
+        }
+
+        // Play/Pause button functionality (placeholder)
+        playPauseButton.onclick = () => {
+            if (playPauseButton.textContent === "▶️") {
+                playPauseButton.textContent = "⏸️";
+                // Start playing
+            } else {
+                playPauseButton.textContent = "▶️";
+                // Pause playing
+            }
+        };
+
+        // Volume control (placeholder)
+        volumeSlider.oninput = (e) => {
+            const volume = e.target.value;
+            // Set audio volume here
+            console.log(`Volume set to ${volume}%`);
+        };
+
+        // Add placeholder functions for other controls
+        document.getElementById('prev').onclick = () => console.log('Previous track');
+        document.getElementById('stop').onclick = () => console.log('Stop playback');
+        document.getElementById('next').onclick = () => console.log('Next track');
+
+    </script>
+</body>
+</html>
